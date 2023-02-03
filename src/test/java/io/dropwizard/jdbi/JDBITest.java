@@ -2,12 +2,12 @@ package io.dropwizard.jdbi;
 
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
-import io.dropwizard.logging.BootstrapLogging;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.logging.common.BootstrapLogging;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,12 +27,17 @@ import java.util.concurrent.Executors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class JDBITest {
     private final DataSourceFactory hsqlConfig = new DataSourceFactory();
+    private final HealthCheckRegistry healthChecks = mock(HealthCheckRegistry.class);
+    private final LifecycleEnvironment lifecycleEnvironment = mock(LifecycleEnvironment.class);
+    private final Environment environment = mock(Environment.class);
+    private final DBIFactory factory = new DBIFactory();
+    private final List<Managed> managed = new ArrayList<>();
+    private final MetricRegistry metricRegistry = new MetricRegistry();
+    private DBI dbi = mock(DBI.class);
 
     {
         BootstrapLogging.bootstrap();
@@ -41,14 +46,6 @@ public class JDBITest {
         hsqlConfig.setDriverClass("org.h2.Driver");
         hsqlConfig.setValidationQuery("SELECT 1");
     }
-
-    private final HealthCheckRegistry healthChecks = mock(HealthCheckRegistry.class);
-    private final LifecycleEnvironment lifecycleEnvironment = mock(LifecycleEnvironment.class);
-    private final Environment environment = mock(Environment.class);
-    private final DBIFactory factory = new DBIFactory();
-    private final List<Managed> managed = new ArrayList<>();
-    private final MetricRegistry metricRegistry = new MetricRegistry();
-    private DBI dbi = mock(DBI.class);
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -68,7 +65,7 @@ public class JDBITest {
         try (Handle handle = dbi.open()) {
             handle.createCall("DROP TABLE people IF EXISTS").invoke();
             handle.createCall(
-                "CREATE TABLE people (name varchar(100) primary key, email varchar(100), age int, created_at timestamp)")
+                    "CREATE TABLE people (name varchar(100) primary key, email varchar(100), age int, created_at timestamp)")
                 .invoke();
             handle.createStatement("INSERT INTO people VALUES (?, ?, ?, ?)")
                 .bind(0, "Coda Hale")

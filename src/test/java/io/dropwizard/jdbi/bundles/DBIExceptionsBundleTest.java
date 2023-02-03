@@ -1,10 +1,10 @@
 package io.dropwizard.jdbi.bundles;
 
-import io.dropwizard.Configuration;
+import io.dropwizard.core.Configuration;
 import io.dropwizard.jdbi.jersey.LoggingDBIExceptionMapper;
 import io.dropwizard.jdbi.jersey.LoggingSQLExceptionMapper;
 import io.dropwizard.jersey.setup.JerseyEnvironment;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.isA;

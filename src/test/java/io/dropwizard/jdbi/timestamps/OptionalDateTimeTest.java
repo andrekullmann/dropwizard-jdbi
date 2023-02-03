@@ -2,7 +2,7 @@ package io.dropwizard.jdbi.timestamps;
 
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.jdbi.DBIFactory;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

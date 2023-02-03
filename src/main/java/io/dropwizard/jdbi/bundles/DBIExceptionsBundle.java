@@ -1,10 +1,10 @@
 package io.dropwizard.jdbi.bundles;
 
-import io.dropwizard.Configuration;
-import io.dropwizard.ConfiguredBundle;
+import io.dropwizard.core.Configuration;
+import io.dropwizard.core.ConfiguredBundle;
 import io.dropwizard.jdbi.jersey.LoggingDBIExceptionMapper;
 import io.dropwizard.jdbi.jersey.LoggingSQLExceptionMapper;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 
 /**
  * A bundle for logging SQLExceptions and DBIExceptions so that their actual causes aren't overlooked.

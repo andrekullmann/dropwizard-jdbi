@@ -41,7 +41,7 @@ import io.dropwizard.jdbi.args.OptionalZonedDateTimeArgumentFactory;
 import io.dropwizard.jdbi.args.ZonedDateTimeArgumentFactory;
 import io.dropwizard.jdbi.args.ZonedDateTimeMapper;
 import io.dropwizard.jdbi.logging.LogbackLog;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.util.Duration;
 import org.skife.jdbi.v2.ColonPrefixNamedParamStatementRewriter;
 import org.skife.jdbi.v2.DBI;

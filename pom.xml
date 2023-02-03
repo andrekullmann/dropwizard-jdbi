@@ -2,16 +2,18 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>io.dropwizard</groupId>
         <artifactId>dropwizard-parent</artifactId>
-        <version>2.1.4</version>
+        <version>4.0.0-beta.3</version>
     </parent>
 
     <groupId>io.dropwizard.modules</groupId>
     <artifactId>dropwizard-jdbi</artifactId>
 
     <name>Dropwizard JDBI Support</name>
+    <version>3.0.0</version>
 
     <licenses>
         <license>
@@ -121,6 +123,7 @@
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
@@ -129,6 +132,7 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time</artifactId>
+            <version>2.12.2</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>

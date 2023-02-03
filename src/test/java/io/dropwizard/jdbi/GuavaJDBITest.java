@@ -3,12 +3,12 @@ package io.dropwizard.jdbi;
 import com.codahale.metrics.MetricRegistry;
 import com.codahale.metrics.health.HealthCheckRegistry;
 import com.google.common.base.Optional;
+import io.dropwizard.core.setup.Environment;
 import io.dropwizard.db.DataSourceFactory;
 import io.dropwizard.db.ManagedDataSource;
 import io.dropwizard.lifecycle.Managed;
 import io.dropwizard.lifecycle.setup.LifecycleEnvironment;
-import io.dropwizard.logging.BootstrapLogging;
-import io.dropwizard.setup.Environment;
+import io.dropwizard.logging.common.BootstrapLogging;
 import org.joda.time.DateTime;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,12 +27,17 @@ import java.util.concurrent.Executors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 public class GuavaJDBITest {
     private final DataSourceFactory hsqlConfig = new DataSourceFactory();
+    private final HealthCheckRegistry healthChecks = mock(HealthCheckRegistry.class);
+    private final LifecycleEnvironment lifecycleEnvironment = mock(LifecycleEnvironment.class);
+    private final Environment environment = mock(Environment.class);
+    private final DBIFactory factory = new DBIFactory();
+    private final List<Managed> managed = new ArrayList<>();
+    private final MetricRegistry metricRegistry = new MetricRegistry();
+    private DBI dbi = mock(DBI.class);
 
     {
         BootstrapLogging.bootstrap();
@@ -41,14 +46,6 @@ public class GuavaJDBITest {
         hsqlConfig.setDriverClass("org.h2.Driver");
         hsqlConfig.setValidationQuery("SELECT 1");
     }
-
-    private final HealthCheckRegistry healthChecks = mock(HealthCheckRegistry.class);
-    private final LifecycleEnvironment lifecycleEnvironment = mock(LifecycleEnvironment.class);
-    private final Environment environment = mock(Environment.class);
-    private final DBIFactory factory = new DBIFactory();
-    private final List<Managed> managed = new ArrayList<>();
-    private final MetricRegistry metricRegistry = new MetricRegistry();
-    private DBI dbi = mock(DBI.class);
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -69,31 +66,31 @@ public class GuavaJDBITest {
             handle.createCall("DROP TABLE people IF EXISTS").invoke();
             handle.createCall(
                     "CREATE TABLE people (name varchar(100) primary key, email varchar(100), age int, created_at timestamp)")
-                  .invoke();
+                .invoke();
             handle.createStatement("INSERT INTO people VALUES (?, ?, ?, ?)")
-                  .bind(0, "Coda Hale")
-                  .bind(1, "chale@yammer-inc.com")
-                  .bind(2, 30)
-                  .bind(3, new Timestamp(1365465078000L))
-                  .execute();
+                .bind(0, "Coda Hale")
+                .bind(1, "chale@yammer-inc.com")
+                .bind(2, 30)
+                .bind(3, new Timestamp(1365465078000L))
+                .execute();
             handle.createStatement("INSERT INTO people VALUES (?, ?, ?, ?)")
-                  .bind(0, "Kris Gale")
-                  .bind(1, "kgale@yammer-inc.com")
-                  .bind(2, 32)
-                  .bind(3, new Timestamp(1365465078000L))
-                  .execute();
+                .bind(0, "Kris Gale")
+                .bind(1, "kgale@yammer-inc.com")
+                .bind(2, 32)
+                .bind(3, new Timestamp(1365465078000L))
+                .execute();
             handle.createStatement("INSERT INTO people VALUES (?, ?, ?, ?)")
-                  .bind(0, "Old Guy")
-                  .bindNull(1, Types.VARCHAR)
-                  .bind(2, 99)
-                  .bind(3, new Timestamp(1365465078000L))
-                  .execute();
+                .bind(0, "Old Guy")
+                .bindNull(1, Types.VARCHAR)
+                .bind(2, 99)
+                .bind(3, new Timestamp(1365465078000L))
+                .execute();
             handle.createStatement("INSERT INTO people VALUES (?, ?, ?, ?)")
-                  .bind(0, "Alice Example")
-                  .bind(1, "alice@example.org")
-                  .bind(2, 99)
-                  .bindNull(3, Types.TIMESTAMP)
-                  .execute();
+                .bind(0, "Alice Example")
+                .bind(1, "alice@example.org")
+                .bind(2, 99)
+                .bindNull(3, Types.TIMESTAMP)
+                .execute();
         }
     }
 
@@ -109,8 +106,8 @@ public class GuavaJDBITest {
         final Handle handle = dbi.open();
 
         final Query<String> names = handle.createQuery("SELECT name FROM people WHERE age < ?")
-                                          .bind(0, 50)
-                                          .map(StringColumnMapper.INSTANCE);
+            .bind(0, 50)
+            .map(StringColumnMapper.INSTANCE);
         assertThat(names).containsOnly("Coda Hale", "Kris Gale");
     }
 
@@ -124,7 +121,7 @@ public class GuavaJDBITest {
         final GuavaPersonDAO dao = dbi.open(GuavaPersonDAO.class);
 
         assertThat(dao.findByName(Optional.of("Coda Hale")))
-                .isEqualTo("Coda Hale");
+            .isEqualTo("Coda Hale");
     }
 
     @Test
@@ -132,7 +129,7 @@ public class GuavaJDBITest {
         final GuavaPersonDAO dao = dbi.open(GuavaPersonDAO.class);
 
         assertThat(dao.findAllNames())
-                .containsOnly("Coda Hale", "Kris Gale", "Old Guy", "Alice Example");
+            .containsOnly("Coda Hale", "Kris Gale", "Old Guy", "Alice Example");
     }
 
     @Test
@@ -140,7 +137,7 @@ public class GuavaJDBITest {
         final GuavaPersonDAO dao = dbi.open(GuavaPersonDAO.class);
 
         assertThat(dao.findAllUniqueNames())
-                .containsOnly("Coda Hale", "Kris Gale", "Old Guy", "Alice Example");
+            .containsOnly("Coda Hale", "Kris Gale", "Old Guy", "Alice Example");
     }
 
     @Test
