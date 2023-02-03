@@ -30,7 +30,7 @@ stages:
   image: registry.gitlab.com/osp-silver/movex/logistics/support/gitlab-docker-aws-cli-maven:latest
   stage: Build
   script:
-    - ./mvnw ${MAVEN_CLI_OPTS}  -B -V -ntp -Prelease -s .m2/gitlab-ci_settings.xml deploy -DskipTests
+    - ./mvnw ${MAVEN_CLI_OPTS}  -B -V -ntp -s .m2/gitlab-ci_settings.xml deploy -DskipTests
   tags:
     - power-runner
 
