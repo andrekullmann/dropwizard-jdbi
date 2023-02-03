@@ -1,0 +1,32 @@
+variables:
+  MAVEN_OPTS: "
+    -Dhttps.protocols=TLSv1.2
+    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    -Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=WARN
+    -Dorg.slf4j.simpleLogger.showDateTime=true
+    -Dorg.slf4j.simpleLogger.log.com.github.dockerjava=WARN
+    -Djava.awt.headless=true"
+
+  MAVEN_CLI_OPTS: "
+    --batch-mode
+    --errors
+    --fail-at-end
+    --show-version
+    -DinstallAtEnd=true
+    -DdeployAtEnd=true"
+
+cache:
+  paths:
+    - .m2/repository
+
+stages:
+  - Build
+
+"Maven Build":
+  image: registry.gitlab.com/osp-silver/movex/logistics/support/gitlab-docker-aws-cli-maven:latest
+  stage: Build
+  script:
+    - mvn ${MAVEN_CLI_OPTS} -s .m2/gitlab-ci_settings.xml deploy
+  tags:
+    - power-runner
+
