@@ -15,6 +15,10 @@ variables:
     -DinstallAtEnd=true
     -DdeployAtEnd=true"
 
+  JAVA_OPTS: "
+    -XX:+TieredCompilation
+    -XX:TieredStopAtLevel=1"
+
 cache:
   paths:
     - .m2/repository
