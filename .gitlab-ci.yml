@@ -46,7 +46,7 @@ stages:
         - git config --global user.name "${GITLAB_USER_NAME}"
     script:
         - git checkout -b "$UPDATE_BRANCH" $CI_COMMIT_SHA
-        - mvn versions:update-properties
+        - mvn versions:update-properties versions:update-parent
         - |-
             if [ "$( git status --porcelain | awk 'match($1, 'M'){print $2}' | grep "pom.xml$" | wc -l)" -gt "0" ]; then
               git commit --message "${COMMIT_MESSAGE}" pom.xml
