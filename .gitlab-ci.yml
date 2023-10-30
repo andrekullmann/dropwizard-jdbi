@@ -24,6 +24,7 @@ cache:
     - .m2/repository
 
 stages:
+  - Prepare
   - Build
 
 "Maven Build":
