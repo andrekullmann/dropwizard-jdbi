@@ -34,3 +34,28 @@ stages:
   tags:
     - power-runner
 
+"Update Dependencies":
+    image: maven:3-eclipse-temurin-21-alpine
+    stage: Prepare
+    before_script:
+        - export UPDATE_BRANCH="VERSION_UPDATE_$(date +%m-%d-%Y)"
+        - export COMMIT_MESSAGE="Version Update $(date +%m-%d-%Y)"
+        - apk add git
+        - git config --global user.email "${GITLAB_USER_EMAIL}"
+        - git config --global user.name "${GITLAB_USER_NAME}"
+    script:
+        - git checkout -b "$UPDATE_BRANCH" $CI_COMMIT_SHA
+        - mvn versions:update-properties
+        - |-
+            if [ "$( git status --porcelain | awk 'match($1, 'M'){print $2}' | grep "pom.xml$" | wc -l)" -gt "0" ]; then
+              git commit --message "${COMMIT_MESSAGE}" pom.xml
+              git push   --push-option merge_request.create \
+                         --push-option merge_request.target=${CI_DEFAULT_BRANCH} \
+                         --push-option merge_request.remove_source_branch \
+                         --push-option merge_request.title="${COMMIT_MESSAGE}" \
+                         --push-option merge_request.merge_when_pipeline_succeeds \
+                         "https://gitlab-ci-token:${GITLAB_TOKEN}@${CI_SERVER_HOST}/${CI_PROJECT_PATH}.git" \
+                         "$UPDATE_BRANCH"
+            fi
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "schedule" && $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
