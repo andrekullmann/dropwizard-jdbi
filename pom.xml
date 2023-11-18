@@ -99,7 +99,7 @@
         <jdbi.version>2.78</jdbi.version>
         <jsr305.version>3.0.2</jsr305.version>
         <joda-time.version>2.12.5</joda-time.version>
-        <versions-maven-plugin.version>2.16.1</versions-maven-plugin.version>
+        <versions-maven-plugin.version>2.16.2</versions-maven-plugin.version>
     </properties>
 
     <dependencies>
