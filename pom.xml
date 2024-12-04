@@ -6,7 +6,7 @@
     <parent>
         <groupId>io.dropwizard</groupId>
         <artifactId>dropwizard-parent</artifactId>
-        <version>4.0.7</version>
+        <version>4.0.11</version>
     </parent>
 
     <groupId>io.dropwizard.modules</groupId>
@@ -98,8 +98,8 @@
 
         <jdbi.version>2.78</jdbi.version>
         <jsr305.version>3.0.2</jsr305.version>
-        <joda-time.version>2.12.7</joda-time.version>
-        <versions-maven-plugin.version>2.17.1</versions-maven-plugin.version>
+        <joda-time.version>2.13.0</joda-time.version>
+        <versions-maven-plugin.version>2.18.0</versions-maven-plugin.version>
     </properties>
 
     <dependencies>
