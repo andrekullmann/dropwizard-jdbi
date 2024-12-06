@@ -249,7 +249,9 @@
                             <goal>analyze-only</goal>
                         </goals>
                         <configuration>
-                            <ignoreAllNonTestScoped>true</ignoreAllNonTestScoped>
+                            <ignoredNonTestScopedDependencies>
+                               <ignoredNonTestScopedDependency>*</ignoredNonTestScopedDependency>
+                           </ignoredNonTestScopedDependencies>
                         </configuration>
                     </execution>
                 </executions>
