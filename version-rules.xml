@@ -5,6 +5,7 @@
         <rule groupId="io.dropwizard">
             <ignoreVersions>
                 <ignoreVersion type="regex">5.*</ignoreVersion>
+                <ignoreVersion type="range">(4.0.7,)</ignoreVersion>
             </ignoreVersions>
         </rule>
     </rules>
